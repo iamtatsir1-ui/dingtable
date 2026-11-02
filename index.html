@@ -135,21 +135,33 @@ animation:liveGreenGlow 2s ease-in-out infinite;
 /* 當刻 / 倒數外框改為與藍色外框相同的 7.5px 粗度 */
 .live-slot-left{border-top:7.5px solid #16a34a!important;border-bottom:7.5px solid #16a34a!important;border-left:7.5px solid #16a34a!important}
 .live-slot-right{border-top:7.5px solid #16a34a!important;border-bottom:7.5px solid #16a34a!important;border-right:7.5px solid #16a34a!important}
-/* 5分鐘倒數：淺紅色漸變 + 持續閃爍（外框粗度同步改為 7.5px） */
+/* 5分鐘倒數：淺紅色漸變 + 持續閃爍（外框粗度同步改為 7.5px）
+   外框維持粗線，時間欄與課堂欄中間的分隔線改為與綠色粗框內相同的幼線（1px） */
 .is-approaching{
 background:linear-gradient(135deg,#fecaca 0%,#fca5a5 40%,#f87171 100%)!important;
 color:#7f1d1d!important;
 font-weight:900!important;
 position:relative;
 animation:approachFlash 0.55s ease-in-out infinite alternate!important;
-border:7.5px solid #ef4444!important;
 }
 @keyframes approachFlash{
 0%{box-shadow:0 0 6px #f87171,inset 0 0 5px #fee2e2;filter:brightness(1)}
 100%{box-shadow:0 0 18px #ef4444,0 0 25px #fbbf24,inset 0 0 10px #fecaca;filter:brightness(1.15)}
 }
-.approach-slot-left{border-top:7.5px solid #ef4444!important;border-bottom:7.5px solid #ef4444!important;border-left:7.5px solid #ef4444!important}
-.approach-slot-right{border-top:7.5px solid #ef4444!important;border-bottom:7.5px solid #ef4444!important;border-right:7.5px solid #ef4444!important}
+/* 左側（時間）只加粗外框三邊，右側（中間線）維持幼線 */
+.approach-slot-left{
+  border-top:7.5px solid #ef4444!important;
+  border-bottom:7.5px solid #ef4444!important;
+  border-left:7.5px solid #ef4444!important;
+  border-right:1px solid #94a3b8!important;
+}
+/* 右側（課堂）只加粗外框三邊，左側（中間線）維持幼線 */
+.approach-slot-right{
+  border-top:7.5px solid #ef4444!important;
+  border-bottom:7.5px solid #ef4444!important;
+  border-right:7.5px solid #ef4444!important;
+  border-left:1px solid #94a3b8!important;
+}
 .manually-hidden{background:#fff!important;color:transparent!important;box-shadow:none!important;cursor:pointer}
 /* 小螢幕微調 */
 @media(max-width:640px){
@@ -166,7 +178,8 @@ border:7.5px solid #ef4444!important;
   .group-col-right{border-right-width:6px!important}
   .live-slot-left,.approach-slot-left{border-left-width:6px!important;border-top-width:6px!important;border-bottom-width:6px!important}
   .live-slot-right,.approach-slot-right{border-right-width:6px!important;border-top-width:6px!important;border-bottom-width:6px!important}
-  .is-approaching{border-width:6px!important}
+  .approach-slot-left{border-right-width:1px!important}
+  .approach-slot-right{border-left-width:1px!important}
 }
 @media(max-height:460px){
   .container{padding-top:calc(1px + env(safe-area-inset-top));padding-bottom:calc(1px + env(safe-area-inset-bottom))}
@@ -237,7 +250,7 @@ const dayIndexToHeader={1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri'};
 const defaultTimetable=[
 ['[時間]','Mon','Tue','Wed','Thu','Fri'],
 ['Home Room\n8:10 - 8:35','','','','',''],
-['1\n8:35 - 9:10','Chin\n1A (201)','Chin\n1A (201)','nAssembly','',''],
+['1\n8:35 - 9:10','Chin\n1A (201)','Chin\n1A (201)','Assembly','',''],
 ['2\n9:10 - 9:45','Chin\n1D (204)','','','',''],
 ['Recess 1\n9:45 - 10:00','','','','',''],
 ['3\n10:00 - 10:35','','','','',''],
