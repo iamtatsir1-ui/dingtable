@@ -3,38 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
-<title>教師個人時間表</title>
+<title>時間表</title>
 <!-- PWA / 加入主畫面 支援 (iPhone / iPad / Android / Desktop / 漢王 iReader Color 7) -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="教師個人時間表">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="時間表">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1e293b">
-<meta name="application-name" content="教師個人時間表">
+<meta name="theme-color" content="#ffffff">
+<meta name="application-name" content="時間表">
 <link rel="apple-touch-icon" href="https://i.ibb.co/LDhqdPqM/teacher-icon-love-work.png">
 <link rel="icon" type="image/png" href="https://i.ibb.co/LDhqdPqM/teacher-icon-love-work.png">
 <link rel="shortcut icon" href="https://i.ibb.co/LDhqdPqM/teacher-icon-love-work.png">
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoi5pWZ5biV5YCL5Lq65pmC6ZaT6KGoIiwic2hvcnRfbmFtZSI6IuWkhOeQhuacn+aYguaooeaKpeivlCIsImRlc2NyaXB0aW9uIjoi5pWZ5biV5YCL5Lq65pmC6ZaT6KGoIiwic3RhcnRfdXJsIjoiLi8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjMWUyOTNiIiwiaWNvbnMiOlt7InNyYyI6Imh0dHBzOi8vaS5pYmIuY28vTERocWRQcU0vdGVhY2hlci1pY29uLWxvdmUtd29yay5wbmciLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIiwiYXB5IjoiYW55In1dfQ==">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-:root{--navy:#1e293b;--blue:#0284c7;--red:#ff003c;--yellow:#fbbf24;--eva-green:#84cc16;--sq:min(100dvw,100dvh)}
+:root{--navy:#1e293b;--blue:#0284c7;--red:#ff003c;--yellow:#fbbf24;--eva-green:#84cc16}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{
   width:100%;height:100%;height:100dvh;overflow:hidden;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang TC","Microsoft JhengHei",sans-serif;
-  background:#0f172a;color:#333;
+  background:#ffffff;color:#333;
   display:flex;justify-content:center;align-items:center;
 }
-/* 強制 1:1 正方形顯示區域：永遠以較短邊為基準，無論 16:9 / 9:16 / 其他比例 */
+/* iPad 8 預設比例（約 4:3）全屏顯示，不再強制 1:1 正方形 */
 .container{
-  width:var(--sq);height:var(--sq);
+  width:100%;height:100%;
   max-width:100dvw;max-height:100dvh;
-  aspect-ratio:1/1;
   display:flex;flex-direction:column;overflow:hidden;
   padding:calc(2px + env(safe-area-inset-top)) calc(3px + env(safe-area-inset-right)) calc(2px + env(safe-area-inset-bottom)) calc(3px + env(safe-area-inset-left));
   background:#fff;
   transition:box-shadow 0.2s, background-color 0.2s;
   position:relative;
+}
+/* 深色模式下狀態列區域背景變黑 */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background: #000000;
+  }
 }
 header{display:flex;justify-content:space-between;align-items:center;gap:4px;flex:0 0 auto;border-bottom:1.5px solid #cbd5e1;padding:0 0 3px;margin:2px 0 3px;min-width:0}
 .header-left{display:flex;align-items:center;gap:clamp(4px,1.5%,12px);min-width:0}
@@ -99,15 +104,21 @@ th,td{border:1px solid #94a3b8;padding:1px 2px;text-align:center;vertical-align:
 th{background:var(--navy);color:#fff;font-weight:700}
 .group-th-bg{background:var(--blue)!important;color:#fff!important;font-weight:800!important}
 .group-bg{background:#f8fafc;font-weight:700}
-.group-col-left{border-left:2.5px solid var(--blue)!important}
-.group-col-right{border-right:2.5px solid var(--blue)!important}
-.group-col-top{border-top:2.5px solid var(--blue)!important}
-.group-col-bottom{border-bottom:2.5px solid var(--blue)!important}
+/* 藍色外框加粗 3 倍：原 2.5px → 7.5px */
+.group-col-left{border-left:7.5px solid var(--blue)!important}
+.group-col-right{border-right:7.5px solid var(--blue)!important}
+.group-col-top{border-top:7.5px solid var(--blue)!important}
+.group-col-bottom{border-bottom:7.5px solid var(--blue)!important}
 .time-col{background:#e2e8f0;font-weight:800;text-align:center}
 .free-slot{background:#fff!important;color:transparent!important}
+/* Recess 1/2/3 與 Lunch 整行（含原本白色空格）改為淺黃色 */
+.recess-lunch-cell{background:#fef9c3!important;color:transparent!important}
+.recess-lunch-time{background:#fef9c3!important;font-weight:800;text-align:center}
 .active-class{background:#fde047!important;color:#0f172a;font-weight:700;cursor:pointer}
 .active-class.class-1a{background:#fbcfe8!important}
 .active-class.class-1d{background:#bfdbfe!important}
+/* Assembly：非常淺的粉綠色 */
+.active-class.class-assembly{background:#f0fdf4!important;color:#14532d}
 /* 當刻課堂：淺綠漸變 */
 .current-live-cell{
 background:linear-gradient(135deg,#bbf7d0 0%,#86efac 50%,#4ade80 100%)!important;
@@ -121,25 +132,26 @@ animation:liveGreenGlow 2s ease-in-out infinite;
 0%,100%{box-shadow:inset 0 0 5px rgba(34,197,94,.4)}
 50%{box-shadow:inset 0 0 12px rgba(34,197,94,.85)}
 }
-.live-slot-left{border-top:2.5px solid #16a34a!important;border-bottom:2.5px solid #16a34a!important;border-left:2.5px solid #16a34a!important}
-.live-slot-right{border-top:2.5px solid #16a34a!important;border-bottom:2.5px solid #16a34a!important;border-right:2.5px solid #16a34a!important}
-/* 5分鐘倒數：淺紅色漸變 + 持續閃爍 */
+/* 當刻 / 倒數外框改為與藍色外框相同的 7.5px 粗度 */
+.live-slot-left{border-top:7.5px solid #16a34a!important;border-bottom:7.5px solid #16a34a!important;border-left:7.5px solid #16a34a!important}
+.live-slot-right{border-top:7.5px solid #16a34a!important;border-bottom:7.5px solid #16a34a!important;border-right:7.5px solid #16a34a!important}
+/* 5分鐘倒數：淺紅色漸變 + 持續閃爍（外框粗度同步改為 7.5px） */
 .is-approaching{
 background:linear-gradient(135deg,#fecaca 0%,#fca5a5 40%,#f87171 100%)!important;
 color:#7f1d1d!important;
 font-weight:900!important;
 position:relative;
 animation:approachFlash 0.55s ease-in-out infinite alternate!important;
-border:2.5px solid #ef4444!important;
+border:7.5px solid #ef4444!important;
 }
 @keyframes approachFlash{
 0%{box-shadow:0 0 6px #f87171,inset 0 0 5px #fee2e2;filter:brightness(1)}
 100%{box-shadow:0 0 18px #ef4444,0 0 25px #fbbf24,inset 0 0 10px #fecaca;filter:brightness(1.15)}
 }
-.approach-slot-left{border-top:2.5px solid #ef4444!important;border-bottom:2.5px solid #ef4444!important;border-left:2.5px solid #ef4444!important}
-.approach-slot-right{border-top:2.5px solid #ef4444!important;border-bottom:2.5px solid #ef4444!important;border-right:2.5px solid #ef4444!important}
+.approach-slot-left{border-top:7.5px solid #ef4444!important;border-bottom:7.5px solid #ef4444!important;border-left:7.5px solid #ef4444!important}
+.approach-slot-right{border-top:7.5px solid #ef4444!important;border-bottom:7.5px solid #ef4444!important;border-right:7.5px solid #ef4444!important}
 .manually-hidden{background:#fff!important;color:transparent!important;box-shadow:none!important;cursor:pointer}
-/* 小螢幕微調（仍保持 1:1 正方形） */
+/* 小螢幕微調 */
 @media(max-width:640px){
   header{gap:3px;padding-bottom:2px;margin-bottom:2px}
   .header-left{gap:4px}
@@ -150,8 +162,11 @@ border:2.5px solid #ef4444!important;
   .date-picker-wrapper input{width:clamp(95px,30%,125px);padding:1px 3px}
   .marquee-wrapper{font-size:clamp(.58rem,2.5%,.78rem);padding:2px 0}
   col.time-column{width:40%}col.day-column{width:60%}
-  .group-col-left{border-left-width:2px!important}
-  .group-col-right{border-right-width:2px!important}
+  .group-col-left{border-left-width:6px!important}
+  .group-col-right{border-right-width:6px!important}
+  .live-slot-left,.approach-slot-left{border-left-width:6px!important;border-top-width:6px!important;border-bottom-width:6px!important}
+  .live-slot-right,.approach-slot-right{border-right-width:6px!important;border-top-width:6px!important;border-bottom-width:6px!important}
+  .is-approaching{border-width:6px!important}
 }
 @media(max-height:460px){
   .container{padding-top:calc(1px + env(safe-area-inset-top));padding-bottom:calc(1px + env(safe-area-inset-bottom))}
@@ -166,7 +181,7 @@ border:2.5px solid #ef4444!important;
 <div id="approaching-banner-top" class="marquee-wrapper marquee-ltr" role="status" aria-live="polite"><div class="marquee-content" id="top-marquee-text"></div></div>
 <header>
 <div class="header-left">
-<h1>教師個人時間表</h1>
+<h1>時間表</h1>
 <div class="date-summary" aria-live="polite">
 <span id="current-date"></span>
 <span id="current-weekday" class="weekday-picker" role="button" tabindex="0" aria-label="點擊修改測試星期" title="點擊修改測試星期"></span>
@@ -222,7 +237,7 @@ const dayIndexToHeader={1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri'};
 const defaultTimetable=[
 ['[時間]','Mon','Tue','Wed','Thu','Fri'],
 ['Home Room\n8:10 - 8:35','','','','',''],
-['1\n8:35 - 9:10','Chin\n1A (201)','Chin\n1A (201)','','',''],
+['1\n8:35 - 9:10','Chin\n1A (201)','Chin\n1A (201)','nAssembly','',''],
 ['2\n9:10 - 9:45','Chin\n1D (204)','','','',''],
 ['Recess 1\n9:45 - 10:00','','','','',''],
 ['3\n10:00 - 10:35','','','','',''],
@@ -234,16 +249,15 @@ const defaultTimetable=[
 ['7\n13:50 - 14:25','','','Chin\n1A (201)','Chin\n1D (204)','Chin\n1D (204)'],
 ['8\n14:25 - 15:00','','','Chin\n1A (201)','Chin\n1D (204)','Chin\n1D (204)'],
 ['Recess 3\n15:00 - 15:05','','','','',''],
-['9\n15:05 - 15:40','','','','',''],
-['Recess 4\n15:40 - 15:50','','','','',''],
-['10\n15:50 - 16:25','','','','','']
+['9\n15:05 - 15:40','','','','','']
 ];
 let manuallyHiddenCells={};let clickCountMap={};let lastClickedKey=null;let clickTimeout=null;
 let customTimeOffset=0;
 function formatDateString(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function parseMin(t){const [h,m]=t.split(':').map(Number);return h*60+m}
 function getSimulatedNow(){return new Date(Date.now()+customTimeOffset)}
-function isTargetChinClass(content){if(!content)return false;return (/Chin/i.test(content)&&!/Chin\s*Meeting/i.test(content))||/^1D\s*\(204\)$/i.test(content.trim())}
+function isTargetChinClass(content){if(!content)return false;return (/Chin/i.test(content)&&!/Chin\s*Meeting/i.test(content))||/^1D\s*\(204\)$/i.test(content.trim())||/Assembly/i.test(content)}
+function isRecessOrLunch(slot){return /^(Recess|Lunch)/i.test(slot||'')}
 function getTimeSlotStatus(timeStr,targetDateStr){
 const now=getSimulatedNow();
 if(targetDateStr!==formatDateString(now)||!timeStr||!timeStr.includes('-'))return{isLive:false,isApproaching:false,diffMs:0,diffSec:0};
@@ -298,7 +312,7 @@ table.style.fontSize=size+'px';
 function fitEvaPanel(){
 const panel=document.getElementById('eva-panel');
 if(!panel||panel.style.display==='none')return;
- 
+  
 const timerMain=panel.querySelector('.eva-timer-main');
 const digitsEl=document.getElementById('eva-timer-digits');
 const targetEl=document.getElementById('eva-target-class');
@@ -306,9 +320,9 @@ const titleEl=panel.querySelector('.eva-timer-title');
 const headerBar=panel.querySelector('.eva-header-bar');
 const grid=panel.querySelector('.eva-grid-container');
 const statusBar=panel.querySelector('.eva-status-bar');
- 
+  
 if(!timerMain||!digitsEl||!targetEl)return;
- 
+  
 // 基準字級大幅提高（約 3 倍），再由溢出檢測縮小到最大可顯示尺寸
 const minorElements=[
 {sel:'.eva-header-bar', ratio:1.65},
@@ -319,32 +333,32 @@ const minorElements=[
 {sel:'.eva-box-power .sub', ratio:1.14},
 {sel:'.eva-status-item', ratio:1.26}
 ];
- 
+  
 const table=document.querySelector('#table-container table');
 let baseSize=14;
 if(table){
 const fs=parseFloat(getComputedStyle(table).fontSize);
 if(!isNaN(fs))baseSize=fs;
 }
- 
+  
 // 先套用次要文字大小（已放大約 3 倍）
 minorElements.forEach(e=>{
 const els=panel.querySelectorAll(e.sel);
 els.forEach(el=>{el.style.fontSize=(baseSize*e.ratio)+'px';el.style.whiteSpace='nowrap';});
 });
- 
+  
 // 核心：digits 與 target 初始值稍為降低，確保「04:56:12」等完整時間（含毫秒）可完整顯示
 // 倒數時間必須完整顯示（含毫秒 MM:SS:MS），因此 digits 縮放優先級最高
 let digitsSize=baseSize*11.5;   // 原 14.4 → 稍為縮小，避免 0 / 2 被裁切
 let targetSize=baseSize*4.2;    // 原 4.8 → 同步微調
 let titleSize=baseSize*2.0;     // 原 2.25 → 同步微調
- 
+  
 const applySizes=()=>{
 digitsEl.style.fontSize=digitsSize+'px';
 targetEl.style.fontSize=targetSize+'px';
 if(titleEl)titleEl.style.fontSize=titleSize+'px';
 };
- 
+  
 // 更嚴格的溢出檢測：特別針對 digits 必須完整可見（含毫秒）
 const isOverflow=()=>{
 if(panel.scrollHeight>panel.clientHeight+1||panel.scrollWidth>panel.clientWidth+1)return true;
@@ -354,10 +368,10 @@ if(digitsEl.scrollWidth>digitsEl.clientWidth+0.5||digitsEl.scrollHeight>digitsEl
 if(targetEl.scrollWidth>targetEl.clientWidth+1||targetEl.scrollHeight>targetEl.clientHeight+1)return true;
 return false;
 };
- 
+  
 // 先嘗試最大尺寸
 applySizes();
- 
+  
 // 若溢出則逐步縮小，優先保住 digits（時間含毫秒）最大且完整可見
 let safety=120;
 while(isOverflow()&&safety-->0){
@@ -380,7 +394,7 @@ el.style.fontSize=Math.max(cur*0.93,baseSize*0.78)+'px';
 }
 applySizes();
 }
- 
+  
 // 最後再嘗試放大一點，把上下空間用盡，但仍確保 digits 完整顯示
 safety=30;
 while(!isOverflow()&&safety-->0){
@@ -397,7 +411,7 @@ applySizes();
 break;
 }
 }
- 
+  
 // 最終保險：若 digits 仍有任何溢出跡象，強制再縮小直到完整可見
 safety=40;
 while((digitsEl.scrollWidth>digitsEl.clientWidth+0.5||digitsEl.scrollHeight>digitsEl.clientHeight+0.5)&&safety-->0){
@@ -491,6 +505,7 @@ for(let i=1;i<totalRows;i++){
 const row=defaultTimetable[i],slot=row[0]||'',status=getTimeSlotStatus(slot,dateInputVal);
 const isLastRow=i===totalRows-1;
 const isLiveRow=hasTarget&&status.isLive;
+const isRecessLunchRow=isRecessOrLunch(slot);
 // 只有真正觸發 EVA 5分鐘倒數的那一列才套用紅色漸變並持續閃爍
 const isThisApproachingRow = (approaching && i === approachingRowIndex && status.diffMs > 0);
 html+='<tr>';
@@ -506,6 +521,7 @@ else if(isTarget)groupClass=' group-bg group-col-right'+(isLastRow?' group-col-b
 }
 if(isTime){
 let liveTimeClass=' time-col';
+if(isRecessLunchRow) liveTimeClass=' recess-lunch-time';
 if(isLiveRow) liveTimeClass=' current-live-cell live-slot-left';
 else if(isThisApproachingRow) liveTimeClass=' is-approaching approach-slot-left';
 html+=`<td class="${liveTimeClass}${groupClass}">${slot.replace(/\n/g,'<br>')}</td>`;
@@ -522,13 +538,15 @@ if(isTarget&&status.isLive){
 html+=`<td class="current-live-cell live-slot-right${groupClass}"></td>`;
 }else if(isThisApproachingRow){
 html+=`<td class="is-approaching approach-slot-right${groupClass}"></td>`;
+}else if(isRecessLunchRow){
+html+=`<td class="recess-lunch-cell${groupClass}"></td>`;
 }else{
 html+=`<td class="free-slot${groupClass}"></td>`;
 }
 }else if(hidden){
 html+=`<td class="manually-hidden${groupClass}" onclick="handleCellClick('${key}')" aria-label="已隱藏的課堂，連點三次還原"></td>`;
 }else{
-const tintClass=/1A\s*\(201\)/i.test(content)?' class-1a':/1D\s*\(204\)/i.test(content)?' class-1d':'';
+const tintClass=/1A\s*\(201\)/i.test(content)?' class-1a':/1D\s*\(204\)/i.test(content)?' class-1d':/Assembly/i.test(content)?' class-assembly':'';
 const bgClass=stateClass?'':' active-class'+tintClass;
 html+=`<td class="${bgClass}${groupClass}${stateClass}" onclick="handleCellClick('${key}')" title="連點三次可隱藏或還原">${content.replace(/\n/g,'<br>')}</td>`;
 }
