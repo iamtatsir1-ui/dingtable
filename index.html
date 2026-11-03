@@ -99,7 +99,9 @@ body.emergency-critical .container{animation:screenCriticalFlash 0.25s infinite 
 #table-container{flex:1 1 auto;min-height:0;min-width:0;width:100%;overflow:hidden;display:flex}
 #table-container.warning-mode{flex:0 0 32%;max-width:32%}
 table{width:100%;height:100%;border-collapse:collapse;table-layout:fixed;font-size:14px;line-height:1.05}
-col.time-column{width:42%}col.day-column{width:58%}
+/* 移除固定百分比，改由 JS 動態設定，確保所有星期欄寬度完全相同 */
+col.time-column{}
+col.day-column{}
 th,td{border:1px solid #94a3b8;padding:1px 2px;text-align:center;vertical-align:middle;overflow:hidden;white-space:nowrap;line-height:1.05}
 th{background:var(--navy);color:#fff;font-weight:700}
 .group-th-bg{background:var(--blue)!important;color:#fff!important;font-weight:800!important}
@@ -173,7 +175,6 @@ animation:approachFlash 0.55s ease-in-out infinite alternate!important;
   .date-picker-wrapper{font-size:clamp(.55rem,2.2%,.7rem);gap:2px}
   .date-picker-wrapper input{width:clamp(95px,30%,125px);padding:1px 3px}
   .marquee-wrapper{font-size:clamp(.58rem,2.5%,.78rem);padding:2px 0}
-  col.time-column{width:40%}col.day-column{width:60%}
   .group-col-left{border-left-width:6px!important}
   .group-col-right{border-right-width:6px!important}
   .live-slot-left,.approach-slot-left{border-left-width:6px!important;border-top-width:6px!important;border-bottom-width:6px!important}
@@ -504,7 +505,28 @@ displayOrder.splice(timeIndex,1);
 displayOrder.splice(displayOrder.indexOf(targetHeader),0,'時間');
 }
 }
-let html='<table aria-label="每週課堂時間表"><colgroup><col class="time-column">'+displayOrder.slice(1).map(()=>'<col class="day-column">').join('')+'</colgroup><thead><tr>';
+
+// ===== 核心修改：動態計算欄寬，確保所有星期欄（Mon~Fri）寬度永遠相同 =====
+const numDays = displayOrder.length - 1;
+let timeWidthPercent, dayWidthPercent;
+if (numDays <= 1) {
+  // 警告模式（只顯示時間 + 今日）
+  timeWidthPercent = 42;
+  dayWidthPercent = 58;
+} else {
+  // 正常模式（時間 + 5 個星期）：時間欄稍窄，5 個星期欄完全等分剩餘空間
+  timeWidthPercent = 15;
+  dayWidthPercent = (100 - timeWidthPercent) / numDays;
+}
+// ================================================================
+
+let html='<table aria-label="每週課堂時間表"><colgroup>';
+html += `<col class="time-column" style="width:${timeWidthPercent}%">`;
+for (let d = 0; d < numDays; d++) {
+  html += `<col class="day-column" style="width:${dayWidthPercent}%">`;
+}
+html += '</colgroup><thead><tr>';
+
 for(const h of displayOrder){
 const isTarget=h===targetHeader,isTime=h==='時間';
 let thClass='';
